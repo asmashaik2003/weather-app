@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    transition: background 0.5s ease;
+    color: #222;
+}
+
+.weather-container {
+    background: #ffffffcc; /* slightly transparent white */
+    padding: 30px 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #2a2a72;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-shadow: 1px 1px 4px #a8c0ff;
+}
+
+form {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+input[type="text"] {
+    padding: 12px 15px;
+    border: none;
+    border-radius: 12px;
+    width: 65%;
+    font-size: 16px;
+    box-shadow: inset 2px 2px 5px #a8c0ff;
+    transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    box-shadow: inset 4px 4px 10px #5271ff;
+}
+
+button {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.4s ease;
+    box-shadow: 0 4px 8px rgba(118,75,162,0.6);
+}
+
+button:hover {
+    background: linear-gradient(135deg, #764ba2, #667eea);
+    box-shadow: 0 6px 15px rgba(118,75,162,0.8);
+}
+
+.weather-result {
+    margin-top: 10px;
+    background: #f1f6ff;
+    padding: 25px 20px;
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(118,75,162,0.2);
+    color: #2a2a72;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+}
+
+.weather-result h2 {
+    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.weather-result p {
+    margin: 8px 0;
+}
+
+.toggle-mode {
+    background-color: #764ba2;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    margin-bottom: 25px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background-color 0.4s ease;
+    box-shadow: 0 4px 10px rgba(118,75,162,0.7);
+}
+
+.toggle-mode:hover {
+    background-color: #5a3780;
+}
+
+.dark-mode {
+    background: linear-gradient(135deg, #1f1c2c, #928dab);
+    color: #ddd;
+    transition: background 0.5s ease;
+}
+
+.dark-mode .weather-container {
+    background: #2c2640cc;
+    color: #eee;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+.dark-mode input[type="text"] {
+    background-color: #423c5a;
+    color: #eee;
+    box-shadow: inset 2px 2px 6px #7169a9;
+    border: none;
+}
+
+.dark-mode input[type="text"]:focus {
+    box-shadow: inset 4px 4px 12px #8e88cc;
+}
+
+.dark-mode button {
+    background: linear-gradient(135deg, #928dab, #665f8f);
+    box-shadow: 0 6px 15px rgba(146,141,171,0.7);
+}
+
+.dark-mode button:hover {
+    background: linear-gradient(135deg, #665f8f, #928dab);
+    box-shadow: 0 8px 20px rgba(146,141,171,0.9);
+}
+
+.dark-mode .weather-result {
+    background: #3a3554cc;
+    color: #ddd;
+    box-shadow: 0 8px 20px rgba(146,141,171,0.5);
+}
+
+.dark-mode .toggle-mode {
+    background-color: #665f8f;
+    box-shadow: 0 4px 10px rgba(102,95,143,0.8);
+}
+
+.dark-mode .toggle-mode:hover {
+    background-color: #544b79;
+}
+
+
+    </style>
+    
+
+    
+</head>
+<body>
+    <div class="weather-container">
+        <h1>🌤️ Weather Checker</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="city" placeholder="Enter city..." required>
+            <button type="submit">Get Weather</button>
+            <button class="toggle-mode" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+
+        </form>
+    
+        {% if weather %}
+        <div class="weather-result">
+            <h2>📍 {{ weather.city }}</h2>
+            <p><strong>{{ weather.description.title }}</strong></p>
+            <p>🌡️Temperature {{ weather.temperature }} °C</p>
+            <p>💧 Humidity: {{ weather.humidity }}%</p>
+            <p>🌬️ Wind: {{ weather.wind_speed }} m/s</p>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+        </script>
+        
+</body>
+</html>
+
+
